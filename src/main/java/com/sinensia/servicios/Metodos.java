@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
+
 import com.sinensia.entidades.Acciones;
 
 public class Metodos {
@@ -22,13 +24,13 @@ public class Metodos {
 			while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
 				fileOutputStream.write(dataBuffer, 0, bytesRead);
 			}
-			System.out.println("La csv fué descargada");
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+
 	}
 
-	public Acciones LecturaFichero(String FILE_URL, String FILE_NAME) throws FileNotFoundException, IOException {
+	public static Acciones LecturaFichero(String FILE_URL, String FILE_NAME) throws FileNotFoundException, IOException {
 		Acciones acc = new Acciones();
 		boolean FirstLine = true;
 		try (BufferedReader br = new BufferedReader(new FileReader(FILE_URL + FILE_NAME))) {
@@ -41,13 +43,14 @@ public class Metodos {
 					continue;
 				}
 				acc.setUltimaFecha(LocalDate.parse(fields[0]));
+				acc.setNombre(FILE_NAME);
+				acc.setDate(LocalTime.now());
 				acc.setCierre(Double.parseDouble(fields[4]));
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 		return acc;
-
 	}
 
 }
